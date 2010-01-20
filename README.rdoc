@@ -1,9 +1,47 @@
 = braintree_query
 
-Description goes here.
+Client for accessing Braintree Payment Solution's reporting API.
+
+To see their API: http://dev.braintreepaymentsolutions.com/query/
+
+Username and password must be passed in to the finder methods (see
+examples)
+
+== Example usage
+
+  # find a specific transaction
+  txn = BraintreeQuery::Transaction.find(1177101697, :username => 'testapi', :password => 'password1')
+  txn.condition
+  #=> 'pendingsettlement'
+
+  # find transactions within a time range
+  txns = BraintreeQuery::Transaction.all(:username => 'testapi',
+                                         :password => 'password1',
+                                         :start_date => ['2010', '01', '20', '15', '00'].join,
+                                         :end_date => ['2010', '01', '20', '15', '18'].join)
+  txns.size
+  #=> 3
+  txns.map(&:condition)
+  #=> ["pending", "pending", "pendingsettlement"]
+
+  # find refunds within a time range
+  txns = BraintreeQuery::Transaction.all(:username => 'testapi',
+                                         :password => 'password1',
+                                         :start_date => ['2010', '01', '19', '00'].join,
+                                         :end_date => ['2010', '01', '19', '12'].join,
+                                         :action_type => 'refund')
+  txns.map(&:transaction_id)
+  #=> ["1176565207", "1176565239"]
+
+  txns.map(&:original_transaction_id)
+  #=> ["1176565193", "1176565221"]
+
+== TODO
+* rdoc
+* better way to do integration tests (i.e. hitting the real server)
 
 == Note on Patches/Pull Requests
- 
+
 * Fork the project.
 * Make your feature addition or bug fix.
 * Add tests for it. This is important so I don't break it in a

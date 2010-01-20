@@ -5,11 +5,12 @@ begin
   require 'jeweler'
   Jeweler::Tasks.new do |gem|
     gem.name = "braintree_query"
-    gem.summary = %Q{TODO: one-line summary of your gem}
-    gem.description = %Q{TODO: longer description of your gem}
+    gem.summary = "Client for accessing Braintree Payment Solution's reporting API."
+    gem.description = "Access Braintree Transactions and Vault records"
     gem.email = "jeff@animoto.com"
     gem.homepage = "http://github.com/jjolma/braintree_query"
     gem.authors = ["Jeff Jolma"]
+    gem.files =  FileList["[A-Z]*", "{bin,generators,lib,test}/**/*", 'lib/jeweler/templates/.gitignore']
     # gem is a Gem::Specification... see http://www.rubygems.org/read/chapter/20 for additional settings
   end
   Jeweler::GemcutterTasks.new
