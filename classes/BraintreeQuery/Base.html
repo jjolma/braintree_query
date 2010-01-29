@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+    <title>BraintreeQuery::Base</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <link rel="stylesheet" href="../../css/reset.css" type="text/css" media="screen" />
+    <link rel="stylesheet" href="../../css/main.css" type="text/css" media="screen" />
+    <script src="../../js/jquery-1.3.2.min.js" type="text/javascript" charset="utf-8"></script>
+    <script src="../../js/jquery-effect.js" type="text/javascript" charset="utf-8"></script>
+    <script src="../../js/main.js" type="text/javascript" charset="utf-8"></script>
+</head>
+
+<body>     
+    <div class="banner">
+        <h1>
+            <span class="type">Class</span> 
+            BraintreeQuery::Base 
+            
+                <span class="parent">&lt; 
+                    
+                    OpenStruct
+                    
+                </span>
+            
+        </h1>
+        <ul class="files">
+            
+            <li><a href="../../files/lib/braintree_query/base_rb.html">lib/braintree_query/base.rb</a></li>
+            
+        </ul>
+    </div>
+    <div id="bodyContent">
+        <div id="content">
+    
+
+    
+
+    
+    
+
+    
+    
+    <div class="sectiontitle">Methods</div>
+    <dl class="methods">
+    
+        <dt>Q</dt>
+        <dd>
+            <ul>
+                
+                <li><a href="#M000000">query</a></li>
+                
+            </ul>
+        </dd>
+    
+    </dl>
+    
+
+    
+
+    
+
+    
+
+    
+    <div class="sectiontitle">Constants</div>
+    <table border='0' cellpadding='5'>
+        
+        <tr valign='top'>
+            <td class="attr-name">BASE_URL</td>
+            <td>=</td>
+            <td class="attr-value">&quot;https://secure.braintreepaymentgateway.com/api/query.php&quot;</td>
+        </tr>
+        
+        
+    </table>
+    
+
+    
+
+    
+            <div class="sectiontitle">Class Public methods</div>
+            
+            <div class="method">
+                <div class="title" id="M000000">
+                    
+                    <a name="M000000"></a><b>query</b>(options)
+                    
+                </div>
+                
+                <div class="description">
+                  <p>
+Issue a query against Braintree&#8217;s query API
+</p>
+<p>
+Returns a hash of the response
+</p>
+
+                </div>
+                
+                
+                
+                
+                <div class="sourcecode">
+                    <p class="source-link">
+                        Source: <a href="javascript:toggleSource('M000000_source')" id="l_M000000_source">show</a>
+                        
+                    </p>
+                    <div id="M000000_source" class="dyn-source">
+                        <pre><span class="ruby-comment cmt"># File lib/braintree_query/base.rb, line 15</span>
+    <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">query</span>(<span class="ruby-identifier">options</span>)
+      <span class="ruby-identifier">raise</span> <span class="ruby-constant">ArgumentError</span>, <span class="ruby-value str">&quot;username required&quot;</span> <span class="ruby-keyword kw">unless</span> <span class="ruby-identifier">options</span>[<span class="ruby-identifier">:username</span>]
+      <span class="ruby-identifier">raise</span> <span class="ruby-constant">ArgumentError</span>, <span class="ruby-value str">&quot;password required&quot;</span> <span class="ruby-keyword kw">unless</span> <span class="ruby-identifier">options</span>[<span class="ruby-identifier">:password</span>]
+
+      <span class="ruby-identifier">query</span> = <span class="ruby-identifier">options</span>.<span class="ruby-identifier">map</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">k</span>,<span class="ruby-identifier">v</span><span class="ruby-operator">|</span> <span class="ruby-node">&quot;#{k}=#{v}&quot;</span> }.<span class="ruby-identifier">join</span>(<span class="ruby-value str">'&amp;'</span>)
+      <span class="ruby-identifier">full_url</span> = [<span class="ruby-constant">BASE_URL</span>, <span class="ruby-identifier">query</span>].<span class="ruby-identifier">join</span> <span class="ruby-value str">'?'</span>
+
+      <span class="ruby-identifier">uri</span> = <span class="ruby-constant">URI</span>.<span class="ruby-identifier">parse</span>(<span class="ruby-identifier">full_url</span>)
+      <span class="ruby-identifier">server</span> = <span class="ruby-constant">Net</span><span class="ruby-operator">::</span><span class="ruby-constant">HTTP</span>.<span class="ruby-identifier">new</span> <span class="ruby-identifier">uri</span>.<span class="ruby-identifier">host</span>, <span class="ruby-identifier">uri</span>.<span class="ruby-identifier">port</span>
+      <span class="ruby-identifier">server</span>.<span class="ruby-identifier">use_ssl</span> = <span class="ruby-identifier">uri</span>.<span class="ruby-identifier">scheme</span> <span class="ruby-operator">==</span> <span class="ruby-value str">'https'</span>
+      <span class="ruby-identifier">server</span>.<span class="ruby-identifier">verify_mode</span> = <span class="ruby-constant">OpenSSL</span><span class="ruby-operator">::</span><span class="ruby-constant">SSL</span><span class="ruby-operator">::</span><span class="ruby-constant">VERIFY_NONE</span>
+      <span class="ruby-identifier">response</span> = <span class="ruby-identifier">server</span>.<span class="ruby-identifier">post</span> <span class="ruby-constant">BASE_URL</span>, <span class="ruby-identifier">query</span>
+      <span class="ruby-identifier">response_hash</span> = <span class="ruby-constant">XmlSimple</span>.<span class="ruby-identifier">xml_in</span>(<span class="ruby-identifier">response</span>.<span class="ruby-identifier">body</span>, { <span class="ruby-value str">'NormaliseSpace'</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value">2</span> })
+      <span class="ruby-identifier">response_hash</span> = <span class="ruby-identifier">massage</span>(<span class="ruby-identifier">response_hash</span>)
+
+      <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">response_hash</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-identifier">err_msg</span> = <span class="ruby-identifier">response_hash</span>[<span class="ruby-value str">'error_response'</span>]
+        <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">err_msg</span> <span class="ruby-operator">=~</span> <span class="ruby-regexp re">/Invalid Username/</span>
+          <span class="ruby-identifier">raise</span> <span class="ruby-constant">BraintreeQuery</span><span class="ruby-operator">::</span><span class="ruby-constant">CredentialError</span>, <span class="ruby-identifier">err_msg</span>
+        <span class="ruby-keyword kw">else</span>
+          <span class="ruby-identifier">raise</span> <span class="ruby-constant">BraintreeQuery</span><span class="ruby-operator">::</span><span class="ruby-constant">Error</span>, <span class="ruby-identifier">err_msg</span>
+        <span class="ruby-keyword kw">end</span>
+      <span class="ruby-keyword kw">end</span>
+      <span class="ruby-identifier">response_hash</span>
+    <span class="ruby-keyword kw">end</span></pre>
+                    </div>
+                </div>
+                
+            </div>
+            
+</div>
+    </div>
+  </body>
+</html>    
