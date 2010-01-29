@@ -39,6 +39,7 @@ examples)
 == TODO
 * rdoc
 * better way to do integration tests (i.e. hitting the real server)
+* add better merchant defined field support
 
 == Note on Patches/Pull Requests
 
