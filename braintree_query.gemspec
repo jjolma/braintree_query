@@ -9,7 +9,7 @@ Gem::Specification.new do |s|
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Jeff Jolma"]
-  s.date = %q{2010-01-20}
+  s.date = %q{2010-01-29}
   s.description = %q{Access Braintree Transactions and Vault records}
   s.email = %q{jeff@animoto.com}
   s.extra_rdoc_files = [
@@ -22,6 +22,8 @@ Gem::Specification.new do |s|
      "Rakefile",
      "VERSION",
      "lib/braintree_query.rb",
+     "lib/braintree_query/base.rb",
+     "lib/braintree_query/customer.rb",
      "lib/braintree_query/errors.rb",
      "lib/braintree_query/transaction.rb",
      "test/helper.rb",
